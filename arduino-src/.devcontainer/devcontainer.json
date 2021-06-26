@@ -1,0 +1,9 @@
+{
+  "name": "Arduino",
+  "dockerComposeFile": ["../../docker-compose.yml"],
+  "service": "arduino",
+  "shutdownAction": "none",
+  "extensions": ["ms-python.python"],
+  // Open the sub-folder with the source code
+  "workspaceFolder": "/workspace/arduino-src"
+}
