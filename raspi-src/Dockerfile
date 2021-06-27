@@ -11,7 +11,7 @@ RUN apt update \
 
 RUN pip3 install --upgrade pip \
  && pip3 install --upgrade setuptools \
- && pip3 install pyserial \
+ && pip3 install -r requirements.txt \
  && rm -rf ~/.cache/pip
 
 ENV DISPLAY host.docker.internal:0
