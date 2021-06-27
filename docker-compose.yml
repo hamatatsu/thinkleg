@@ -1,0 +1,17 @@
+version: "3.9"
+
+services:
+  arduino:
+    build:
+      context: arduino-src
+    volumes:
+      - .:/workspace:cached
+    tty: true
+    command: /usr/bin/socat pty,raw,echo=0,link=/dev/ttyACM0 tcp:raspi:1234
+  raspi:
+    build:
+      context: raspi-src
+    volumes:
+      - .:/workspace:cached
+    tty: true
+    command: /usr/bin/socat tcp-l:1234,reuseaddr pty,raw,echo=0,link=/dev/ttyACM0
