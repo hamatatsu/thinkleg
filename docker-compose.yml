@@ -4,6 +4,7 @@ services:
   arduino:
     build:
       context: arduino-src
+      dockerfile: .devcontainer/Dockerfile
     volumes:
       - .:/workspace:cached
     tty: true
@@ -11,6 +12,7 @@ services:
   raspi:
     build:
       context: raspi-src
+      dockerfile: .devcontainer/Dockerfile
     volumes:
       - .:/workspace:cached
     tty: true
