@@ -2,6 +2,7 @@ import tkinter as tk
 import random
 import time
 
+
 class MainButton(tk.Frame):
   def __init__(self, master, **kw):
     super().__init__(master, **kw)
@@ -45,6 +46,7 @@ class MainButton(tk.Frame):
     self["background"] = self.defaultBackground
     self.command = self.start
 
+
 class Application(tk.Frame):
   def __init__(self, master):
     super().__init__(master)
@@ -58,6 +60,7 @@ class Application(tk.Frame):
 
     self.quit = tk.Button(self, text="QUIT", fg="red", command=self.master.destroy)
     self.quit.pack(side="bottom")
+
 
 root = tk.Tk()
 root.title("反応速度")
