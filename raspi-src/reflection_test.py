@@ -16,9 +16,9 @@ class MainButton(tk.Frame):
     self["height"] = 270
     self["borderwidth"] = 5
     self["relief"] = "ridge"
-    self.bind("<ButtonPress>", self.on_enter)
+    self.bind("<ButtonPress>", self.on_press)
 
-  def on_enter(self, e):
+  def on_press(self, e):
     self.command(e)
 
   def start(self, e):
