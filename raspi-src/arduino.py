@@ -4,7 +4,7 @@ import serial
 
 
 class Arduino():
-  def __init__(self, port='/dev/ttyACM0', baudrate=9600, timeout=1):
+  def __init__(self, port='/dev/ttyACM0', baudrate=115200, timeout=1):
     self.logger = getLogger(__name__)
     self.ser = serial.Serial()
     self.port = port
