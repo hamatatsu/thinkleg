@@ -23,7 +23,11 @@ class Arduino():
     self.ser.port = self.port
     self.ser.baudrate = self.baudrate
     self.ser.timeout = self.timeout
-    self.ser.open()
+    try:
+      self.ser.open()
+    except serial.serialutil.SerialException:
+      self.logger.error("Serial port not found")
+      return
     self.logger.debug("Arduino opened")
 
   def close(self):
