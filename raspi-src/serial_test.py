@@ -6,7 +6,7 @@ import csv
 
 _serial = serial.Serial()
 _serial.port = '/dev/ttyACM0'
-_serial.baudrate = 9600
+_serial.baudrate = 115200
 _serial.timeout = 0.01
 
 FILENAME = datetime.datetime.now().strftime("log/%y%m%d%H%M%S.csv")
