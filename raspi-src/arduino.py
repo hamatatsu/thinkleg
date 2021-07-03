@@ -1,15 +1,18 @@
+from collections import deque
+import csv
 from logging import getLogger
 
 import serial
 
 
 class Arduino():
-  def __init__(self, port='/dev/ttyACM0', baudrate=115200, timeout=1):
+  def __init__(self, port='/dev/ttyACM0', baudrate=115200, timeout=0.01):
     self.logger = getLogger(__name__)
     self.ser = serial.Serial()
     self.port = port
     self.baudrate = baudrate
     self.timeout = timeout
+    self.record = deque()
     self.logger.debug("Arduino initialized")
 
   def __enter__(self):
@@ -35,4 +38,9 @@ class Arduino():
     self.logger.debug("Arduino closed")
 
   def get(self):
+    data = self.ser.readlines()
+    self.record.extend(data)
+    return data
+
+  def save(self):
     pass
