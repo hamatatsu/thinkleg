@@ -1,4 +1,4 @@
-from datetime import datetime
+import signal
 import threading
 import time
 
@@ -10,22 +10,45 @@ _serial.baudrate = 115200
 _serial.timeout = 0.01
 
 RATE = 50
-INTETRVAL = 1 / RATE
 
-def send_data(ser):
-  data = f"{datetime.now()},{200}\n"
-  ser.write(data.encode())
 
-def schedule(interval_sec, ser):
-  base_timing = time.time()
-  while True:
-    t = threading.Thread(target=send_data, args = [ser])
-    t.start()
+class Emulator():
+  def __init__(self, rate, ser):
+    self.rate = rate
+    self.interval = 1 / self.rate
+    self.ser = ser
+    self.basetime = 0
+    signal.signal(signal.SIGALRM, self.handler)
+    while True:
+      read = threading.Thread(target=self.read_data)
+      read.start()
+      time.sleep(0.01)
 
-    current_timing = time.time()
-    sleep_sec = interval_sec - ((current_timing - base_timing) % interval_sec)
-    time.sleep(max(sleep_sec, 0))
+  def write_data(self):
+    t = int((time.time() - self.basetime) * 1000)
+    data = f"{t},{200}\n"
+    self.ser.write(data.encode())
+
+  def read_data(self):
+    data = self.ser.read()
+    if data == b'0':
+      self.ser.write("ready\n".encode())
+    elif data == b'1':
+      self.start()
+    elif data == b'2':
+      self.stop()
+
+  def handler(self, num, frame):
+    write = threading.Thread(target=self.write_data)
+    write.start()
+
+  def start(self):
+    self.basetime = time.time()
+    signal.setitimer(signal.ITIMER_REAL, 0.001, self.interval)
+
+  def stop(self):
+    signal.setitimer(signal.ITIMER_REAL, 0, self.interval)
+
 
 with _serial as ser:
-  schedule(INTETRVAL, ser)
-
+  Emulator(RATE, ser)
