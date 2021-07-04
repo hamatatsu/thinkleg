@@ -1,9 +1,9 @@
 {
-  "name": "Raspberry Pi",
+  "name": "Client",
   "dockerComposeFile": ["../../docker-compose.yml"],
-  "service": "raspi",
+  "service": "client",
   "shutdownAction": "none",
   "extensions": ["ms-python.python"],
   // Open the sub-folder with the source code
-  "workspaceFolder": "/workspace/raspi-src"
+  "workspaceFolder": "/workspace/client"
 }

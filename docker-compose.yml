@@ -1,17 +1,17 @@
 version: "3.9"
 
 services:
-  arduino:
+  arduino-emu:
     build:
-      context: arduino-src
+      context: arduino-emu
       dockerfile: .devcontainer/Dockerfile
     volumes:
       - .:/workspace:cached
     tty: true
-    command: /usr/bin/socat pty,raw,echo=0,link=/dev/ttyACM0 tcp:raspi:1234
-  raspi:
+    command: /usr/bin/socat pty,raw,echo=0,link=/dev/ttyACM0 tcp:client:1234
+  client:
     build:
-      context: raspi-src
+      context: client
       dockerfile: .devcontainer/Dockerfile
     volumes:
       - .:/workspace:cached
