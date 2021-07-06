@@ -7,8 +7,8 @@ RUN apt update \
  && apt autoremove \
  && apt clean
 
-WORKDIR /workspace/raspi-src
-ADD requirements.txt /workspace/raspi-src
+WORKDIR /workspace/client
+ADD requirements.txt /workspace/client
 
 RUN pip3 install -U pip \
  && pip3 install -U setuptools \
