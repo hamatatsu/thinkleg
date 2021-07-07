@@ -1,3 +1,4 @@
+import csv
 import queue
 from logging import getLogger
 
@@ -33,13 +34,27 @@ class Arduino():
     self.logger.debug("Arduino opened")
 
   def close(self):
+    self.ser.write(b'2')
     self.ser.close()
     self.logger.debug("Arduino closed")
+  
+  def start(self):
+    self.ser.write(b'1')
 
   def read(self):
     data = self.ser.readlines()
-    self.record.put(data)
+    if data:
+      for d in data:
+        self.record.put(d.decode().strip().split(','))
+      # self.logger.debug("Arduino read")
     return data
 
   def get_record(self):
     pass
+
+  def save_csv(self, filename):
+    with open(filename, 'a') as f:
+      writer = csv.writer(f)
+      while not self.record.empty():
+        writer.writerow(self.record.get())
+    # self.logger.debug("Arduino saved")
