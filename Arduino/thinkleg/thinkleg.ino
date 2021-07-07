@@ -5,7 +5,6 @@ int rate = 50;
 unsigned long interval = 1000 / rate;
 
 void writeData() {
-  current_time = millis();
   val0 = analogRead(0);
   Serial.print(current_time - base_time);
   Serial.write(",");
@@ -19,7 +18,7 @@ void setup() {
 
 void loop() {
   current_time = millis();
-  if (writeFlag && current_time > next_time) {
+  if (writeFlag && current_time >= next_time) {
     writeData();
     next_time += interval;
   }
@@ -37,6 +36,7 @@ void serialEvent() {
     case 49: // 1
       writeFlag = true;
       base_time = millis();
+      next_time = base_time;
       break;
     case 50: // 2
       writeFlag = false;
