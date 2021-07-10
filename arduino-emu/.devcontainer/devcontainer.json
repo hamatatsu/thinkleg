@@ -5,5 +5,5 @@
   "shutdownAction": "none",
   "extensions": ["ms-python.python"],
   // Open the sub-folder with the source code
-  "workspaceFolder": "/workspace/arduinoemu"
+  "workspaceFolder": "/workspace/arduino-emu"
 }
