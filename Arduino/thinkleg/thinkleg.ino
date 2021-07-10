@@ -1,14 +1,15 @@
 unsigned long current_time, base_time, next_time;
-int val0;
+int val;
 bool writeFlag = false;
 int rate = 50;
 unsigned long interval = 1000 / rate;
+int pinNum = 5;
 
 void writeData() {
-  val0 = analogRead(0);
+  val = analogRead(pinNum);
   Serial.print(current_time - base_time);
   Serial.write(",");
-  Serial.print(val0);
+  Serial.print(val);
   Serial.println();
 }
 
