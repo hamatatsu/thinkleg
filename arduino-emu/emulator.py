@@ -32,7 +32,7 @@ class Emulator():
   def read_data(self):
     data = self.ser.read()
     if data == b'0':
-      self.ser.write("ready\n".encode())
+      self.ser.write("ready".encode())
     elif data == b'1':
       self.start()
     elif data == b'2':
