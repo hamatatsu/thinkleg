@@ -1,0 +1,19 @@
+version: "3.9"
+
+services:
+  arduino-emu:
+    build:
+      context: arduino-emu
+      dockerfile: .devcontainer/Dockerfile
+    volumes:
+      - .:/workspace:cached
+    tty: true
+    command: /usr/bin/socat pty,raw,echo=0,link=/dev/ttyACM0 tcp:client:1234
+  client:
+    build:
+      context: client
+      dockerfile: .devcontainer/Dockerfile
+    volumes:
+      - .:/workspace:cached
+    tty: true
+    command: /usr/bin/socat tcp-l:1234,reuseaddr pty,raw,echo=0,link=/dev/ttyACM0

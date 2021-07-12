@@ -1,0 +1,9 @@
+{
+  "name": "Client",
+  "dockerComposeFile": ["../../docker-compose.yml"],
+  "service": "client",
+  "shutdownAction": "none",
+  "extensions": ["ms-python.python"],
+  // Open the sub-folder with the source code
+  "workspaceFolder": "/workspace/client"
+}
