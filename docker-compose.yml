@@ -5,6 +5,7 @@ services:
     build:
       context: arduino-emu
       dockerfile: .devcontainer/Dockerfile
+    container_name: arduino-emu
     volumes:
       - .:/workspace:cached
     tty: true
@@ -13,6 +14,7 @@ services:
     build:
       context: client
       dockerfile: .devcontainer/Dockerfile
+    container_name: client
     volumes:
       - .:/workspace:cached
     tty: true
