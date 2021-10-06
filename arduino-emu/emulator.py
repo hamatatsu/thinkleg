@@ -18,11 +18,17 @@ class Emulator():
     self.interval = 1 / self.rate
     self.ser = ser
     self.basetime = 0
+    self.nexttime = 0
+    self.writeFlag = False
     signal.signal(signal.SIGALRM, self.handler)
     while True:
       read = threading.Thread(target=self.read_data)
       read.start()
-      time.sleep(0.01)
+      currenttime = time.time()
+      if(self.writeFlag and currenttime >= self.nexttime) {
+        write_data()
+        nexttime += interval;
+      }
 
   def write_data(self):
     t = int((time.time() - self.basetime) * 1000)
@@ -34,9 +40,11 @@ class Emulator():
     if data == b'0':
       self.ser.write("ready".encode())
     elif data == b'1':
-      self.start()
+      self.writeFlag = True
+      self.basetime = time.time()
+      self.nexttime = self.basetime
     elif data == b'2':
-      self.stop()
+      self.writeFlag = False
 
   def handler(self, num, frame):
     write = threading.Thread(target=self.write_data)
