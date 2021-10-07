@@ -31,7 +31,7 @@ class Arduino():
       self.ser.open()
     except serial.serialutil.SerialException:
       self.logger.error("Serial port not found")
-      return
+      raise serial.serialutil.SerialException
     self.logger.debug("Arduino opened")
 
   def close(self):
@@ -50,7 +50,7 @@ class Arduino():
       return device[0].device
     else:
       self.logger.error('Ardunoは接続されていません')
-      return None
+      exit(0)
 
   def read(self):
     data = self.ser.readlines()
