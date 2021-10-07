@@ -31,7 +31,7 @@ class Arduino():
       self.ser.open()
     except serial.serialutil.SerialException:
       self.logger.error("Serial port not found")
-      raise serial.serialutil.SerialException
+      exit(1)
     self.logger.debug("Arduino opened")
 
   def close(self):
@@ -45,13 +45,14 @@ class Arduino():
 
   def get_port(self):
     ports = list_ports.comports()
+    print([info.description for info in ports])
     # .descriptionでデバイスの名前を取得出来る
     device = [info for info in ports if "Arduino" in info.description]
     if not len(device) == 0:
       return device[0].device
     else:
       self.logger.error('Arduino not connected')
-      exit(0)
+      return '/dev/ttyACM0'
 
   def read(self):
     data = self.ser.readlines()
