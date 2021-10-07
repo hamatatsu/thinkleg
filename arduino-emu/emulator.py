@@ -23,7 +23,8 @@ class Emulator():
       if self.writeFlag and currenttime >= self.nexttime:
         self.write_data()
         self.nexttime += self.interval
-      self.read_data()
+      if self.ser.in_waiting > 0:
+        self.read_data()
 
   def write_data(self):
     t = int((time.time() - self.basetime) * 1000)
