@@ -10,12 +10,7 @@ class Arduino():
   def __init__(self, port='/dev/ttyACM0', baudrate=115200, timeout=0.01):
     self.logger = getLogger(__name__)
     self.ser = serial.Serial()
-    ports=list_ports.comports()
-    device=[info for info in ports if "Arduino" in info.description] #.descriptionでデバイスの名前を取得出来る
-    if not len(device) == 0:
-      self.port = device[0].device
-    else:
-      print('Ardunoは接続されていません')
+    self.port = self.get_port()
     self.baudrate = baudrate
     self.timeout = timeout
     self.record = queue.Queue()
@@ -47,6 +42,15 @@ class Arduino():
   def start(self):
     self.ser.write(b'1')
     self.logger.debug("Arduino started")
+
+  def get_port(self):
+    ports=list_ports.comports()
+    device=[info for info in ports if "Arduino" in info.description] #.descriptionでデバイスの名前を取得出来る
+    if not len(device) == 0:
+      return device[0].device
+    else:
+      self.logger.error('Ardunoは接続されていません')
+      return None
 
   def read(self):
     data = self.ser.readlines()
