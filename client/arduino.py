@@ -7,7 +7,7 @@ from serial.tools import list_ports
 
 
 class Arduino():
-  def __init__(self, port, baudrate=115200, timeout=0.01):
+  def __init__(self, baudrate=115200, timeout=0.01):
     self.logger = getLogger(__name__)
     self.ser = serial.Serial()
     self.port = self.get_port()
