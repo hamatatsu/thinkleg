@@ -65,7 +65,7 @@ class Arduino():
 
   def save_csv(self, filename):
     with open(filename, 'a') as f:
-      writer = csv.writer(f)
+      writer = csv.writer(f, lineterminator="\n")
       while not self.record.empty():
         writer.writerow(self.record.get())
     # self.logger.debug("Arduino saved")
