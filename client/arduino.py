@@ -3,13 +3,19 @@ import queue
 from logging import getLogger
 
 import serial
+from serial.tools import list_ports
 
 
 class Arduino():
   def __init__(self, port='/dev/ttyACM0', baudrate=115200, timeout=0.01):
     self.logger = getLogger(__name__)
     self.ser = serial.Serial()
-    self.port = port
+    ports=list_ports.comports()
+    device=[info for info in ports if "Arduino" in info.description] #.descriptionでデバイスの名前を取得出来る
+    if not len(device) == 0:
+      self.port = device[0].device
+    else:
+      print('Ardunoは接続されていません')
     self.baudrate = baudrate
     self.timeout = timeout
     self.record = queue.Queue()
