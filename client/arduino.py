@@ -40,6 +40,7 @@ class Arduino():
   
   def start(self):
     self.ser.write(b'1')
+    self.logger.debug("Arduino started")
 
   def read(self):
     data = self.ser.readlines()
