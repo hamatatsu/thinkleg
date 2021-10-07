@@ -49,7 +49,7 @@ class Arduino():
     if not len(device) == 0:
       return device[0].device
     else:
-      self.logger.error('Ardunoは接続されていません')
+      self.logger.error('Arduino not connected')
       exit(0)
 
   def read(self):
