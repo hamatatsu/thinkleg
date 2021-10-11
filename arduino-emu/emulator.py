@@ -1,5 +1,3 @@
-import signal
-import threading
 import time
 
 import serial
@@ -18,11 +16,15 @@ class Emulator():
     self.interval = 1 / self.rate
     self.ser = ser
     self.basetime = 0
-    signal.signal(signal.SIGALRM, self.handler)
+    self.nexttime = 0
+    self.writeFlag = False
     while True:
-      read = threading.Thread(target=self.read_data)
-      read.start()
-      time.sleep(0.01)
+      currenttime = time.time()
+      if self.writeFlag and currenttime >= self.nexttime:
+        self.write_data()
+        self.nexttime += self.interval
+      if self.ser.in_waiting > 0:
+        self.read_data()
 
   def write_data(self):
     t = int((time.time() - self.basetime) * 1000)
@@ -34,20 +36,11 @@ class Emulator():
     if data == b'0':
       self.ser.write("ready".encode())
     elif data == b'1':
-      self.start()
+      self.writeFlag = True
+      self.basetime = time.time()
+      self.nexttime = self.basetime
     elif data == b'2':
-      self.stop()
-
-  def handler(self, num, frame):
-    write = threading.Thread(target=self.write_data)
-    write.start()
-
-  def start(self):
-    self.basetime = time.time()
-    signal.setitimer(signal.ITIMER_REAL, 0.001, self.interval)
-
-  def stop(self):
-    signal.setitimer(signal.ITIMER_REAL, 0, self.interval)
+      self.writeFlag = False
 
 
 with _serial as ser:
