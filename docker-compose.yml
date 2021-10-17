@@ -20,6 +20,8 @@ services:
     container_name: server
     volumes:
       - .:/workspace:cached
+    ports:
+      - 3000:3000
     tty: true
   broker:
     image: eclipse-mosquitto
@@ -28,7 +30,5 @@ services:
       - 1883:1883
       - 9001:9001
     volumes:
-      - ./broker/mosquitto.conf:/mosquitto/config/mosquitto.conf
-      - ./broker/data:/mosquitto/data
-      - ./broker/log:/mosquitto/log
+      - ./broker:/mosquitto
     tty: true
