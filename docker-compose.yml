@@ -21,3 +21,14 @@ services:
     volumes:
       - .:/workspace:cached
     tty: true
+  broker:
+    image: eclipse-mosquitto
+    container_name: broker
+    ports:
+      - 1883:1883
+      - 9001:9001
+    volumes:
+      - ./broker/mosquitto.conf:/mosquitto/config/mosquitto.conf
+      - ./broker/data:/mosquitto/data
+      - ./broker/log:/mosquitto/log
+    tty: true
