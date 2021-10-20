@@ -140,6 +140,3 @@ cython_debug/
 
 # log directory
 log/
-
-# node modules
-node_modules
