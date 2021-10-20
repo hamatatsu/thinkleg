@@ -1,3 +1,4 @@
 pyserial
 autopep8
 ipykernel
+paho-mqtt
