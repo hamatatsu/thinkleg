@@ -15,3 +15,7 @@ services:
       - .:/workspace:cached
     tty: true
     command: /usr/bin/socat tcp-l:1234,reuseaddr pty,raw,echo=0,link=/dev/ttyACM0
+
+networks:
+  thinkleg-network:
+    external: true
