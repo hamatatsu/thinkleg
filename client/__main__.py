@@ -1,4 +1,5 @@
 import datetime
+import json
 import sys
 import time
 from logging.config import fileConfig
@@ -22,6 +23,8 @@ with Arduino() as arduino:
       data = arduino.read()
       arduino.save_csv(f"log/{date}.csv")
       if data:
-        client.publish("test", data[0].decode().split(',')[1].strip())
+        for d in data:
+          (date, leg) = d.decode().strip().split(',')
+          client.publish("test", json.dumps({"date":date, "leg":leg}))
   except KeyboardInterrupt:
     exit()
