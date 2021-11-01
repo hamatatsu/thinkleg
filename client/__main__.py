@@ -24,7 +24,7 @@ with Arduino() as arduino:
       arduino.save_csv(f"log/{date}.csv")
       if data:
         for d in data:
-          (date, leg) = d.decode().strip().split(',')
-          client.publish("test", json.dumps({"date":date, "leg":leg}))
+          (date2, leg) = d.decode().strip().split(',')
+          client.publish("test", json.dumps({"date":date2, "leg":leg}))
   except KeyboardInterrupt:
     exit()
