@@ -1,14 +1,17 @@
+import csv
 import datetime
 import json
 import sys
 import time
 from logging.config import fileConfig
+
 import paho.mqtt.client as mqtt
 
 from .arduino import Arduino
 
-date = datetime.datetime.now().strftime("%y%m%d%H%M%S")
-fileConfig("client/logging.conf", defaults={"date":date}, disable_existing_loggers=False)
+start = datetime.datetime.now()
+startstr = start.strftime("%y%m%d%H%M%S")
+fileConfig("client/logging.conf", defaults={"date": startstr}, disable_existing_loggers=False)
 
 client = mqtt.Client()
 client.username_pw_set("ham", "thinkleg")
@@ -16,15 +19,20 @@ client.connect(sys.argv[1], 1883, 60)
 client.loop_start()
 
 with Arduino() as arduino:
-  time.sleep(1)
+  time.sleep(1)  # 起動待ち
   arduino.start()
-  try:
-    while True:
-      data = arduino.read()
-      arduino.save_csv(f"log/{date}.csv")
-      if data:
-        for d in data:
-          (date2, leg) = d.decode().strip().split(',')
-          client.publish("test", json.dumps({"date":date2, "leg":leg}))
-  except KeyboardInterrupt:
-    exit()
+  with open(f"log/{startstr}.csv", 'a') as f:
+    try:
+      while True:
+        time.sleep(1)
+        arduino.read()
+        records = arduino.get_record()
+        writer = csv.writer(f, lineterminator="\n")
+        while not records.empty():
+          record = records.get()
+          writer.writerow(record)
+          date = start + datetime.timedelta(milliseconds=int(record[0]))
+          dataobj = {"date": date.strftime("%y%m%d%H%M%S"), "leg": record[1]}
+          client.publish("test", json.dumps(dataobj))
+    except KeyboardInterrupt:
+      exit()

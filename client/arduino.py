@@ -61,16 +61,9 @@ class Arduino():
         self.records.put(d.decode().strip().split(','))
       # self.logger.debug("Arduino read")
     return data
-    
+
   def records_is_empty(self):
     return self.records.empty()
 
   def get_record(self):
-    pass
-
-  def save_csv(self, filename):
-    with open(filename, 'a') as f:
-      writer = csv.writer(f, lineterminator="\n")
-      while not self.records.empty():
-        writer.writerow(self.records.get())
-    # self.logger.debug("Arduino saved")
+    return self.records
