@@ -1,5 +1,5 @@
-import time
 import math
+import time
 
 import serial
 
@@ -29,7 +29,7 @@ class Emulator():
 
   def write_data(self):
     t = int((time.time() - self.basetime) * 1000)
-    num = math.sin(t*math.pi/1000.0) * 256 + 256
+    num = math.floor(math.sin(t*math.pi/1000.0) * 256 + 256)
     data = f"{t},{num}\n"
     self.ser.write(data.encode())
 
@@ -46,4 +46,5 @@ class Emulator():
 
 
 with _serial as ser:
+  print("Emulator started")
   Emulator(RATE, ser)

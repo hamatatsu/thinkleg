@@ -7,7 +7,9 @@ services:
     volumes:
       - .:/workspace:cached
     tty: true
-    command: /usr/bin/socat pty,raw,echo=0,link=/dev/ttyACM0 tcp:client:1234
+    command: >
+      sh -c "/usr/bin/socat pty,raw,echo=0,link=/dev/ttyACM0 tcp:client:1234 &
+      python3 emulator.py"
   client:
     build: client
     container_name: client
