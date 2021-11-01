@@ -24,7 +24,6 @@ with Arduino() as arduino:
   with open(f"log/{startstr}.csv", 'a') as f:
     try:
       while True:
-        time.sleep(1)
         arduino.read()
         records = arduino.get_record()
         writer = csv.writer(f, lineterminator="\n")
@@ -32,7 +31,7 @@ with Arduino() as arduino:
           record = records.get()
           writer.writerow(record)
           date = start + datetime.timedelta(milliseconds=int(record[0]))
-          dataobj = {"date": date.strftime("%y%m%d%H%M%S"), "leg": record[1]}
+          dataobj = {"date": date.strftime('%Y-%m-%d %H:%M:%S.%f')[:-3], "leg": record[1]}
           client.publish("test", json.dumps(dataobj))
     except KeyboardInterrupt:
       exit()
