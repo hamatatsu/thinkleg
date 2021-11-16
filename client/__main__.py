@@ -1,6 +1,7 @@
 import csv
 import datetime
 import json
+import os
 import sys
 import time
 from logging.config import fileConfig
@@ -18,6 +19,12 @@ client.username_pw_set("ham", "thinkleg")
 client.connect(sys.argv[1], 1883, 60)
 client.loop_start()
 
+
+def make_dataobjs(record):
+  date = start + datetime.timedelta(milliseconds=int(record[0]))
+  return {"date": date.strftime('%Y-%m-%d %H:%M:%S.%f')[:-3], "leg": record[1]}
+
+
 with Arduino() as arduino:
   time.sleep(1)  # 起動待ち
   arduino.start()
@@ -25,13 +32,16 @@ with Arduino() as arduino:
     try:
       while True:
         arduino.read()
-        records = arduino.get_record()
         writer = csv.writer(f, lineterminator="\n")
-        while not records.empty():
-          record = records.get()
-          writer.writerow(record)
-          date = start + datetime.timedelta(milliseconds=int(record[0]))
-          dataobj = {"date": date.strftime('%Y-%m-%d %H:%M:%S.%f')[:-3], "leg": record[1]}
-          client.publish("test", json.dumps(dataobj))
+        records = list(arduino.get_record().queue)
+        writer.writerows(records)
+        dataobjs = list(map(make_dataobjs, records))
+        client.publish(f"legdata/{os.uname()[1]}", json.dumps(dataobjs))
+        time.sleep(2)
     except KeyboardInterrupt:
       exit()
+
+      records = list(arduino.get_record().queue)
+      writer.writerows(records)
+      dataobjs = list(map(make_dataobjs, records))
+      client.publish(os.uname()[1], json.dumps(dataobjs))
