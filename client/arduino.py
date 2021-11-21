@@ -1,5 +1,3 @@
-import csv
-import queue
 from logging import getLogger
 
 import serial
@@ -13,7 +11,6 @@ class Arduino():
     self.port = self.get_port()
     self.baudrate = baudrate
     self.timeout = timeout
-    self.records = queue.Queue()
     self.logger.debug("Arduino initialized")
 
   def __enter__(self):
@@ -57,13 +54,6 @@ class Arduino():
   def read(self):
     data = self.ser.readlines()
     if data:
-      for d in data:
-        self.records.put(d.decode().strip().split(','))
+      data = list(map(lambda d: d.decode().strip().split(','), data))
       # self.logger.debug("Arduino read")
     return data
-
-  def records_is_empty(self):
-    return self.records.empty()
-
-  def get_record(self):
-    return self.records

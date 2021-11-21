@@ -30,18 +30,15 @@ with Arduino() as arduino:
   arduino.start()
   with open(f"log/{startstr}.csv", 'a') as f:
     try:
+      writer = csv.writer(f, lineterminator="\n")
       while True:
-        arduino.read()
-        writer = csv.writer(f, lineterminator="\n")
-        records = list(arduino.get_record().queue)
-        writer.writerows(records)
+        records = arduino.read()
+        # print(records[:10])
+        if not records: break
         dataobjs = list(map(make_dataobjs, records))
+        writer.writerows(records)
         client.publish(f"legdata/{os.uname()[1]}", json.dumps(dataobjs))
+        # client.publish(f"legdata/test", json.dumps(dataobjs))
         time.sleep(2)
     except KeyboardInterrupt:
       exit()
-
-      records = list(arduino.get_record().queue)
-      writer.writerows(records)
-      dataobjs = list(map(make_dataobjs, records))
-      client.publish(os.uname()[1], json.dumps(dataobjs))
