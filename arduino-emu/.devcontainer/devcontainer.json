@@ -3,7 +3,7 @@
   "dockerComposeFile": ["../../docker-compose.yml"],
   "service": "arduino-emu",
   "shutdownAction": "none",
-  "extensions": ["ms-python.python"],
+  "extensions": [],
   // Open the sub-folder with the source code
   "workspaceFolder": "/workspace/arduino-emu"
 }

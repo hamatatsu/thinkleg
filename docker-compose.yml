@@ -2,20 +2,22 @@ version: "3.9"
 
 services:
   arduino-emu:
-    build:
-      context: arduino-emu
-      dockerfile: .devcontainer/Dockerfile
+    build: arduino-emu
     container_name: arduino-emu
     volumes:
       - .:/workspace:cached
     tty: true
-    command: /usr/bin/socat pty,raw,echo=0,link=/dev/ttyACM0 tcp:client:1234
+    command: >
+      sh -c "/usr/bin/socat pty,raw,echo=0,link=/dev/ttyACM0 tcp:client:1234 &
+      python3 emulator.py"
   client:
-    build:
-      context: client
-      dockerfile: .devcontainer/Dockerfile
+    build: client
     container_name: client
     volumes:
       - .:/workspace:cached
     tty: true
     command: /usr/bin/socat tcp-l:1234,reuseaddr pty,raw,echo=0,link=/dev/ttyACM0
+
+networks:
+  thinkleg-network:
+    external: true
